@@ -19,35 +19,35 @@ class Table
 		
 	}
 
-	public static function all(){
-
+	public static function all(){ // on crée la function all en public static
 		return App::getDb()->query(" 
 			SELECT * 
 			FROM ".static::getTable()."
-			", get_called_class());
+			", get_called_class()); // return la function getDb dans app.php, query execute une requête sql
+		//Selectione tout depuis ".static::getTable()" renvoie le nom de la table.
 	} 
 	
-	public function __get($key){
-		$method = 'get'.ucfirst($key);
-		$this->$key = $this->$method();
-		return $this->$key;
+	public function __get($key){ // on crée la function __get en public static avec $key 
+		$method = 'get'.ucfirst($key); //ucfirst met la première lettre de $key en majuscule et on transforme une variable ('get.($Key)') en url.
+		$this->$key = $this->$method(); //(objet-> $key = objet -> method (get)
+		return $this->$key; 
 
 	}
 
-	public static function find($id){
+	public static function find($id){ //Permet de selectioner tout dans la table et retourne tout depuis la class sur laquelle elle à était appeller depuis la function getDb ".static::getTable()" depuis App.php
 		return App::getDb()->prepare("
 			SELECT * 
 			FROM ".static::getTable()." 
-			WHERE id = ?",
+			WHERE id = ?", // cherche la ou l'id est égale ce que l'on cherche (exemple id = 32 retourne la ligne de l'id 32)
 			[$id],
 			get_called_class(),
-			true);
+			true); // voir la ligne 47
 	}
-	public static function query($statement, $atribute = null, $one = false){
+	public static function query($statement, $atribute = null, $one = false)
 		if ($atribute){
-			return App::getDb()->prepare($statement, $atribute, get_called_class(), $one);
+			return App::getDb()->prepare($statement, $atribute, get_called_class(), $one); // si atribute = null -> prepare 
 		}else{
-		 return App::getDb()->query($statement, get_called_class(), $one);
+		 return App::getDb()->query($statement, get_called_class(), $one); // si atribute != null -> execute query
 		}
 		
 
